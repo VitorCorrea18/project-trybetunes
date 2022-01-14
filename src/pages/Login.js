@@ -14,16 +14,8 @@ class Login extends React.Component {
       inputUserName: '',
       isButtonDisabled: true,
       loading: false,
+      logged: false,
     };
-  }
-
-  // Não sei se estou fazendo certo. O teste local não funciona. Mas tenho que setar o loading como true enquanto faço
-  // a requisição e ao terminar setar novamente pra falso. Mas não sei ainda onde devo colocar o await ou then para fazer isso.
-  componentDidUpdate() {
-    const { loading } = this.state;
-    if (loading) {
-      return (<Loading />);
-    } this.renderLoginPage();
   }
 
   checkValueLength = (value) => {
@@ -41,67 +33,66 @@ class Login extends React.Component {
     // A função é chamada após o setState terminar de atualizar o estado.
   }
 
-  // redirect = () => const history = useHistory();
-
-  login = async (newUser) => {
-    await createUser(newUser);
-    return (<Redirect to="/search" />);
-  }
-
   onSubmitButtonClick = (event) => {
     event.preventDefault();
     const { inputUserName } = this.state;
     const newUser = {
       name: inputUserName,
     };
-    this.setState({ loading: true });
-    this.login(newUser);
-  }
+    this.setState({ loading: true }, async () => {
+      // Após setar o estado loading como true, chama de forma asyncrona a função createUser com um obj contente as informações do usuario.
+      // Ao terminar a função createUser seta os states loading como false e logged como true.
+      // O estado logged será usado para renderização condicional, usando o redirect do react router para encaminhar a pagina principal.
+      await createUser(newUser);
+      this.setState({
+        loading: false,
+        logged: true });
+    });
+  };
 
   renderLoginPage = () => {
     const { inputUserName, isButtonDisabled } = this.state;
     return (
-      <div data-testid="page-login" className="login-page">
-        <section className="login-rectangle">
-          <img
-            className="logo-trybe-tunes"
-            src={ LogoImg }
-            alt="logo-trybetunes"
-          />
-          <div className="form-rectangle">
-            <form className="login-form" onSubmit={ this.onSubmitButtonClick }>
-              <input
-                data-testid="login-name-input"
-                name="inputUserName"
-                className="login-input"
-                placeholder="Nome"
-                value={ inputUserName }
-                onChange={ this.onInputChange }
-              />
-              <button
-                data-testid="login-submit-button"
-                type="submit"
-                disabled={ isButtonDisabled }
-                className="btn"
-              >
-                Entrar
-              </button>
+      <section className="login-rectangle">
+        <img
+          className="logo-trybe-tunes"
+          src={ LogoImg }
+          alt="logo-trybetunes"
+        />
+        <div className="form-rectangle">
+          <form className="login-form" onSubmit={ this.onSubmitButtonClick }>
+            <input
+              data-testid="login-name-input"
+              name="inputUserName"
+              className="login-input"
+              placeholder="Nome"
+              value={ inputUserName }
+              onChange={ this.onInputChange }
+            />
+            <button
+              data-testid="login-submit-button"
+              type="submit"
+              disabled={ isButtonDisabled }
+              className="btn"
+            >
+              Entrar
+            </button>
 
-            </form>
-          </div>
-        </section>
-
-      </div>
+          </form>
+        </div>
+      </section>
     );
   }
 
   render() {
-    const { loading } = this.state;
+    const { loading, logged } = this.state;
     return (
-      <div>
+      <div data-testid="page-login" className="login-page">
+        { /* verifica se logged é true, caso verdadeiro faz o redirect  */ }
+        {logged && <Redirect to="/search" />}
+
         { loading ? <Loading /> : this.renderLoginPage() }
       </div>
-
     );
   }
 }
