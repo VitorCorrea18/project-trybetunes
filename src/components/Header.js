@@ -1,7 +1,8 @@
 import React from 'react';
-import LogoImg from '../img/logo-header.png';
+import { Link } from 'react-router-dom';
 import { getUser } from '../services/userAPI';
 import Loading from './Loading';
+import LogoImg from '../img/logo-header.png';
 import '../styles/header.css';
 
 class Header extends React.Component {
@@ -40,6 +41,29 @@ class Header extends React.Component {
                 </div>
               </section>)
         }
+        <nav className="navigation">
+          <Link
+            data-testid="link-to-search"
+            to="/search"
+            className="link-nav"
+          >
+            Pesquisa
+          </Link>
+          <Link
+            data-testid="link-to-favorites"
+            to="/favorites"
+            className="link-nav favorites-nav"
+          >
+            Favoritas
+          </Link>
+          <Link
+            data-testid="link-to-profile"
+            to="/profile"
+            className="link-nav"
+          >
+            Perfil
+          </Link>
+        </nav>
 
       </header>
     );
