@@ -17,7 +17,7 @@ class Search extends React.Component {
     const { name, value } = event.target;
     this.setState({ [name]: value }, () => {
       if (value.length >= MIN_SEARCH_LENGTH) {
-        this.setState({ isSearchButtonDisabled:false });
+        this.setState({ isSearchButtonDisabled: false });
       } else this.setState({ isSearchButtonDisabled: true });
     });
   }
