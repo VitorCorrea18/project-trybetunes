@@ -1,8 +1,8 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
-import LogoImg from '../img/logo-trybetunes.png';
+import LogoImg from '../img/logo-header.png';
 import { getUser } from '../services/userAPI';
 import Loading from './Loading';
+import '../styles/header.css';
 
 class Header extends React.Component {
   constructor() {
@@ -34,7 +34,7 @@ class Header extends React.Component {
             ? <Loading />
             : (
               <section className="top-header">
-                <img src={ LogoImg } alt="trybe-tunes-logo" />
+                <img src={ LogoImg } alt="trybe-tunes-logo" className="logo-header" />
                 <div className="user-button">
                   <span data-testid="header-user-name">{ userName }</span>
                 </div>
@@ -45,9 +45,5 @@ class Header extends React.Component {
     );
   }
 }
-
-// Header.propTypes = {
-//   userName: PropTypes.string.isRequired,
-// };
 
 export default Header;
