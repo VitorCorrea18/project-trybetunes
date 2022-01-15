@@ -23,6 +23,7 @@ class Album extends React.Component {
 
   fetchMusics = async () => {
     const { match: { params: { id } } } = this.props;
+    // https://developer.mozilla.org/en-US/docs/Web/API/Response/json
     const request = await getMusics(id).then((result) => result);
     const albumInfo = request.find((album) => album.artistName);
     const musics = request.filter((track) => track.previewUrl);
