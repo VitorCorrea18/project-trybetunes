@@ -37,7 +37,7 @@ class Search extends React.Component {
     if (searchResult.length === 0) {
       this.setState({ notFound: true });
     } else this.setState({ notFound: false });
-    // lucas
+
     this.setState({
       albuns: searchResult,
       artistName: searchInput,
@@ -82,6 +82,7 @@ class Search extends React.Component {
       <div data-testid="page-search" className="search-page">
         <Header />
         {this.renderSearchForm()}
+
         {loading && <Loading />}
 
         {
@@ -93,6 +94,7 @@ class Search extends React.Component {
             </span>
           </div>)
         }
+
         {
           // Renderização condicional para exibir as mensagens de notFound ou o span com as músicas encontradas.
           // Como o searchAlbunsAPI retorna um array vazio caso não encontre nada, eu dei um jeito de avisar por estado a
@@ -106,6 +108,7 @@ class Search extends React.Component {
         }
 
         <ul className="album-list">
+
           {
             // Lmebrete para o eu do futuro > o map não precisa estar numa função separada, deve estar aqui no render, pois se
             // o array for vazio ele já não vai renderizar nada..
@@ -131,6 +134,7 @@ class Search extends React.Component {
             })
 
           }
+
         </ul>
       </div>
     );

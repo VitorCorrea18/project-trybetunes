@@ -14,8 +14,8 @@ class AlbumCard extends React.Component {
           />
         </div>
         <div className="artist-info">
-          <span>{ collectionName }</span>
-          <p>{ artistName }</p>
+          <span data-testid="album-name">{ collectionName }</span>
+          <p data-testid="artist-name">{ artistName }</p>
         </div>
       </section>
     );
