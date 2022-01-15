@@ -17,11 +17,13 @@ class Header extends React.Component {
   componentDidMount() {
     this.fetchUserData();
   }
+  // Consultei o repositorio do Lucas Petzinger para ver como usar uma função assincrona combinado com o setState.
+  // "https://github.com/tryber/sd-017-project-trybetunes/tree/lucas-petzinger-trybetunes-project"
 
   fetchUserData = async () => {
     this.setState({ loading: true }, async () => {
-      const USER = await getUser();
-      const { name } = USER;
+      const user = await getUser();
+      const { name } = user;
       this.setState({ userName: name, loading: false });
     });
   }

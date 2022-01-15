@@ -94,6 +94,10 @@ class Search extends React.Component {
           </div>)
         }
         {
+          // Renderização condicional para exibir as mensagens de notFound ou o span com as músicas encontradas.
+          // Como o searchAlbunsAPI retorna um array vazio caso não encontre nada, eu dei um jeito de avisar por estado a
+          // diferença entre array vazio do estado inicial para o array vazio de notFound.
+
           notFound
           && (
             <div className="div-not-found">
@@ -103,6 +107,9 @@ class Search extends React.Component {
 
         <ul className="album-list">
           {
+            // Lmebrete para o eu do futuro > o map não precisa estar numa função separada, deve estar aqui no render, pois se
+            // o array for vazio ele já não vai renderizar nada..
+
             albuns.map((album) => {
               const { collectionId } = album;
               return (

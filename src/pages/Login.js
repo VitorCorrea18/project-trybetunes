@@ -8,6 +8,10 @@ import '../styles/login.css';
 const MIN_CHARACTER = 3;
 
 class Login extends React.Component {
+  // Consultei o repositorio do Lucas Petzinger para tirar uma ideia de como fazer a mensagem de 'carregando...'
+  // e o Redirec para a página principal após o login pois não conseguia fazer o redirecionamento funcionar então saquei a ideia
+  // de criar os estados 'logged' e 'loading' e usar a renderização condicional olhando o código dele e repliquei nos requisitos posteriores.
+  // "https://github.com/tryber/sd-017-project-trybetunes/tree/lucas-petzinger-trybetunes-project"
   constructor() {
     super();
     this.state = {
