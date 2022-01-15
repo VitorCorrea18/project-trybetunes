@@ -84,8 +84,22 @@ class Search extends React.Component {
         {this.renderSearchForm()}
         {loading && <Loading />}
 
-        {showResult && <span>{`Resultado de álbuns de: ${artistName}`}</span>}
-        {(notFound && <span>Nenhum álbum foi encontrado </span>)}
+        {
+          showResult
+        && (
+          <div className="div-albuns-found">
+            <span className="span-albuns-found">
+              {`Resultado de álbuns de: ${artistName}`}
+            </span>
+          </div>)
+        }
+        {
+          notFound
+          && (
+            <div className="div-not-found">
+              <span className="span-not-found">Nenhum álbum foi encontrado </span>
+            </div>)
+        }
 
         <ul className="album-list">
           {
@@ -96,6 +110,7 @@ class Search extends React.Component {
                   <Link
                     data-testid={ `link-to-album-${collectionId}` }
                     to={ `/album/${collectionId}` }
+                    className="link-album-card"
                   >
                     <AlbumCard
                       artistName={ album.artistName }
