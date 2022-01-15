@@ -1,13 +1,14 @@
 import React from 'react';
 import propTypes from 'prop-types';
+import '../styles/musicPage.css';
 
 class MusicCard extends React.Component {
   render() {
     const { trackName, previewUrl } = this.props;
 
     return (
-      <section>
-        <span>{trackName}</span>
+      <section className="track-section">
+        <span className="track-name">{trackName}</span>
         <audio
           data-testid="audio-component"
           src={ previewUrl }

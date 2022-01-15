@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import AlbumCard from '../components/AlbumCard';
 import MusicCard from '../components/MusicCard';
+import '../styles/musicPage.css';
 
 class Album extends React.Component {
   constructor() {
@@ -40,12 +41,13 @@ class Album extends React.Component {
         <Header />
         <main className="music-page">
           <AlbumCard
+            className="album-card"
             artistName={ artistName }
             collectionName={ collectionName }
             artworkUrl100={ artworkUrl100 }
           />
-          <section>
-            <ul>
+          <section className="track-list-section">
+            <ul className="track-list">
               {
                 musics.map((music) => {
                   const { previewUrl, trackName } = music;
