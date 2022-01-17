@@ -4,6 +4,8 @@ import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import AlbumCard from '../components/AlbumCard';
 import MusicCard from '../components/MusicCard';
+import Loading from '../components/Loading';
+import { getFavoriteSongs, addSong, removeSong } from '../services/favoriteSongsAPI';
 import '../styles/musicPage.css';
 
 class Album extends React.Component {
@@ -14,11 +16,14 @@ class Album extends React.Component {
       artistName: '',
       artworkUrl100: '',
       collectionName: '',
+      favorites: [],
+      loading: false,
     };
   }
 
   componentDidMount() {
     this.fetchMusics();
+    this.recoverFavoritesSongs();
   }
 
   fetchMusics = async () => {
@@ -35,8 +40,28 @@ class Album extends React.Component {
     });
   };
 
+  addFavorite = async (newFavorite) => {
+    await addSong(newFavorite);
+    const upDatedList = await getFavoriteSongs();
+    this.setState({ favorites: upDatedList });
+  }
+
+  removeFavorite = async (thisFavorite) => {
+    await removeSong(thisFavorite);
+    const upDatedList = await getFavoriteSongs();
+    this.setState({ favorites: upDatedList });
+  }
+
+  recoverFavoritesSongs = async () => {
+    this.setState({ loading: true });
+    const allFavorites = await getFavoriteSongs();
+    this.setState({ favorites: allFavorites, loading: false });
+  }
+
   render() {
-    const { musics, artistName, artworkUrl100, collectionName } = this.state;
+    const {
+      musics, artistName, artworkUrl100, collectionName, favorites, loading,
+    } = this.state;
     return (
       <div data-testid="page-album">
         <Header />
@@ -50,17 +75,25 @@ class Album extends React.Component {
           <section className="track-list-section">
             <ul className="track-list">
               {
-                musics.map((music) => {
-                  const { previewUrl, trackName, trackId } = music;
-                  return (
-                    <MusicCard
-                      key={ trackName }
-                      previewUrl={ previewUrl }
-                      trackName={ trackName }
-                      trackId={ trackId }
-                    />
-                  );
-                })
+                loading
+                  ? <Loading />
+                  : (
+                    musics.map((music) => {
+                      const { previewUrl, trackName, trackId } = music;
+                      return (
+                        <MusicCard
+                          key={ trackId }
+                          previewUrl={ previewUrl }
+                          trackName={ trackName }
+                          trackId={ trackId }
+                          favorites={ favorites }
+                          addFavorite={ this.addFavorite }
+                          removeFavorite={ this.removeFavorite }
+                          test={ this.test }
+                        />
+                      );
+                    })
+                  )
               }
             </ul>
           </section>

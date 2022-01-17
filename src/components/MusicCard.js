@@ -1,6 +1,5 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 import '../styles/musicPage.css';
 
@@ -14,31 +13,33 @@ class MusicCard extends React.Component {
   }
 
   componentDidMount() {
-    this.recoverFavoritesSongs();
+    // ao montar o componente chama a função que verifica se a musica deste card está presente no array de favoritas,
+    // para trazer as musicas favoritas já com input como checked.
+    this.checkFavorite();
   }
 
-  addFavorite = async () => {
-    const { trackName, previewUrl, trackId } = this.props;
-    const newFavorite = { trackName, previewUrl, trackId };
-    this.setState({ loading: true });
-    await addSong(newFavorite);
+  onFavoriteInputChange = async () => { // atualiza o estado de checked do input favorita.
+    const { trackName, previewUrl, trackId, removeFavorite, addFavorite } = this.props;
+    const { isFavorite } = this.state;
+    const musicInfo = { trackName, previewUrl, trackId };
+    if (isFavorite) { // isFavorite é o estado do checked. Caso seja true, muda pra false e chama a função de remover favoritos.
+      this.setState({ isFavorite: false, loading: true });
+      await removeFavorite(musicInfo);
+      this.setState({ loading: false });
+    } else { // cao seja falso, muda pra true e chama a função de adicionar favoritos.
+      this.setState({ isFavorite: true, loading: true });
+      await addFavorite(musicInfo);
+    }
     this.setState({ loading: false });
   }
 
-  onFavoriteInputChange = () => {
-    const { isFavorite } = this.state;
-    if (isFavorite) {
-      this.setState({ isFavorite: false });
-    } else this.setState({ isFavorite: true });
-    this.addFavorite();
-  }
-
-  recoverFavoritesSongs = async () => {
-    const { trackId } = this.props;
-    const allFavorites = await getFavoriteSongs();
-    if (allFavorites.find((song) => song.trackId === trackId)) {
+  checkFavorite = () => {
+    // verifica se a musica deste card se encontra na lista de favoritos, para setar o estado isFavorite de acordo e marcar
+    // as musicas favoritadas.
+    const { favorites, trackId } = this.props;
+    if (favorites.find((song) => song.trackId === trackId)) {
       this.setState({ isFavorite: true });
-    }
+    } else this.setState({ isFavorite: false });
   }
 
   render() {
@@ -81,6 +82,9 @@ MusicCard.propTypes = {
   trackName: propTypes.string.isRequired,
   previewUrl: propTypes.string.isRequired,
   trackId: propTypes.number.isRequired,
+  favorites: propTypes.arrayOf(propTypes.object).isRequired,
+  removeFavorite: propTypes.func.isRequired,
+  addFavorite: propTypes.func.isRequired,
 };
 
 export default MusicCard;
