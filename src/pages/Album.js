@@ -51,12 +51,13 @@ class Album extends React.Component {
             <ul className="track-list">
               {
                 musics.map((music) => {
-                  const { previewUrl, trackName } = music;
+                  const { previewUrl, trackName, trackId } = music;
                   return (
                     <MusicCard
                       key={ trackName }
                       previewUrl={ previewUrl }
                       trackName={ trackName }
+                      trackId={ trackId }
                     />
                   );
                 })

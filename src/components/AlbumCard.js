@@ -25,7 +25,11 @@ class AlbumCard extends React.Component {
 AlbumCard.propTypes = {
   artistName: propTypes.string.isRequired,
   collectionName: propTypes.string.isRequired,
-  artworkUrl100: propTypes.string.isRequired,
+  artworkUrl100: propTypes.string,
+};
+
+AlbumCard.defaultProps = {
+  artworkUrl100: '../img/logo-trybetunes.png',
 };
 
 export default AlbumCard;
