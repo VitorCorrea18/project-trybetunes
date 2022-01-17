@@ -1,6 +1,6 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 import '../styles/musicPage.css';
 
@@ -9,8 +9,12 @@ class MusicCard extends React.Component {
     super();
     this.state = {
       loading: false,
-      isChecked: false,
+      isFavorite: false,
     };
+  }
+
+  componentDidMount() {
+    this.recoverFavoritesSongs();
   }
 
   addFavorite = async () => {
@@ -22,16 +26,24 @@ class MusicCard extends React.Component {
   }
 
   onFavoriteInputChange = () => {
-    const { isChecked } = this.state;
-    if (isChecked) {
-      this.setState({ isChecked: false });
-    } else this.setState({ isChecked: true });
+    const { isFavorite } = this.state;
+    if (isFavorite) {
+      this.setState({ isFavorite: false });
+    } else this.setState({ isFavorite: true });
     this.addFavorite();
+  }
+
+  recoverFavoritesSongs = async () => {
+    const { trackId } = this.props;
+    const allFavorites = await getFavoriteSongs();
+    if (allFavorites.find((song) => song.trackId === trackId)) {
+      this.setState({ isFavorite: true });
+    }
   }
 
   render() {
     const { trackName, previewUrl, trackId } = this.props;
-    const { loading, isChecked } = this.state;
+    const { loading, isFavorite } = this.state;
 
     return (
       <section className="track-section">
@@ -57,7 +69,7 @@ class MusicCard extends React.Component {
           type="checkbox"
           className="favorite-checkbox"
           name="favoriteCheckBox"
-          checked={ isChecked }
+          checked={ isFavorite }
           onChange={ this.onFavoriteInputChange }
         />
       </section>
