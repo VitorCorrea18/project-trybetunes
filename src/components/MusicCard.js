@@ -9,6 +9,7 @@ class MusicCard extends React.Component {
     this.state = {
       loading: false,
       isFavorite: false,
+      mounted: true,
     };
   }
 
@@ -18,15 +19,19 @@ class MusicCard extends React.Component {
     this.checkFavorite();
   }
 
+  componentWillUnmount() {
+    this.setState({ mounted: false });
+  }
+
   onFavoriteInputChange = async () => { // atualiza o estado de checked do input favorita.
     const { trackName, previewUrl, trackId, removeFavorite, addFavorite } = this.props;
-    const { isFavorite } = this.state;
+    const { isFavorite, mounted } = this.state;
     const musicInfo = { trackName, previewUrl, trackId };
     if (isFavorite) { // isFavorite é o estado do checked. Caso seja true, muda pra false e chama a função de remover favoritos.
       this.setState({ isFavorite: false, loading: true });
       await removeFavorite(musicInfo);
-      this.setState({ loading: false });
-    } else { // cao seja falso, muda pra true e chama a função de adicionar favoritos.
+      if (mounted) this.setState({ loading: false }); // tentando parar o erro de memory leak.
+    } else { // caso seja falso, muda pra true e chama a função de adicionar favoritos.
       this.setState({ isFavorite: true, loading: true });
       await addFavorite(musicInfo);
     }
@@ -65,14 +70,18 @@ class MusicCard extends React.Component {
               </audio>
             )
         }
-        <input
-          data-testid={ `checkbox-music-${trackId}` }
-          type="checkbox"
-          className="favorite-checkbox"
-          name="favoriteCheckBox"
-          checked={ isFavorite }
-          onChange={ this.onFavoriteInputChange }
-        />
+        <label htmlFor="favoriteCheckBox">
+          Favorita
+          <input
+            data-testid={ `checkbox-music-${trackId}` }
+            type="checkbox"
+            className="favorite-checkbox"
+            id="favoriteCheckBox"
+            name="favoriteCheckBox"
+            checked={ isFavorite }
+            onChange={ this.onFavoriteInputChange }
+          />
+        </label>
       </section>
     );
   }
@@ -84,7 +93,11 @@ MusicCard.propTypes = {
   trackId: propTypes.number.isRequired,
   favorites: propTypes.arrayOf(propTypes.object).isRequired,
   removeFavorite: propTypes.func.isRequired,
-  addFavorite: propTypes.func.isRequired,
+  addFavorite: propTypes.func,
+};
+
+MusicCard.defaultProps = {
+  addFavorite: null,
 };
 
 export default MusicCard;

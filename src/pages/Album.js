@@ -89,7 +89,6 @@ class Album extends React.Component {
                           favorites={ favorites }
                           addFavorite={ this.addFavorite }
                           removeFavorite={ this.removeFavorite }
-                          test={ this.test }
                         />
                       );
                     })
