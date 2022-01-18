@@ -62,7 +62,8 @@ class ProfileEdit extends React.Component {
     return false;
   }
 
-  onSubmitButtonClick = async () => {
+  onSubmitButtonClick = async (event) => {
+    event.preventDefault();
     const { name, email, image, description } = this.state;
     const upDatedUser = { name, email, image, description };
     this.setState({ loading: true });
