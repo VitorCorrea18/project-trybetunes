@@ -1,0 +1,12 @@
+.track-list-section {
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    height: 100vh;
+}
+
+.track-list {
+    /* align-self: center; */
+    /* justify-self: center; */
+    /* margin-top: 10rem; */
+}
